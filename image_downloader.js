@@ -114,13 +114,17 @@ function saveFile(){
 }
 
 function loadFile(){
-	var content = fs.readFileSync(SAVE_FILE)
-	existingImages=JSON.parse(content)
+	if (fs.existsSync(SAVE_FILE)){
+		var content = fs.readFileSync(SAVE_FILE)
+		existingImages=JSON.parse(content)
+	}
 }
 
 if (process.argv.length<3){
 	console.log("Not enough arguments");
 }else{
+	console.log("Downloading images for share ID: "+process.argv[2])
+
 	loadFile()
 
 	downloadSharedGalery(process.argv[2], error =>{
