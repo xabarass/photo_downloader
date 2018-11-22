@@ -1,0 +1,16 @@
+{
+  "name": "photos_downloader",
+  "version": "1.0.0",
+  "description": "This script downloads images from amazon photos galery",
+  "main": "image_downloader.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.16.2",
+    "build-url": "^1.2.0",
+    "request": "^2.88.0"
+  }
+}
