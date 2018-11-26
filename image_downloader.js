@@ -5,11 +5,14 @@ const url = require('url');
 const axios = require('axios');
 const https = require('https');
 const fs = require('fs');
+const path = require('path');
 
 const BASE_URL="https://www.amazon.com/drive/v1/"
-const ARCHIVE_NAME="archive.zip"
-const SAVE_FILE="downloaded_images.json"
+var ARCHIVE_NAME="archive.zip"
+var SAVE_FILE="downloaded_images.json"
 const GOOD_ERROR="no new images in album"
+
+var BASE_DIR="."
 
 var existingImages={}
 
@@ -123,6 +126,12 @@ function loadFile(){
 if (process.argv.length<3){
 	console.log("Not enough arguments");
 }else{
+	if (process.argv.length>3){
+		BASE_DIR=process.argv[3]
+	}
+	SAVE_FILE=path.join(BASE_DIR, SAVE_FILE)
+	ARCHIVE_NAME=path.join(BASE_DIR, ARCHIVE_NAME)
+
 	console.log("Downloading images for share ID: "+process.argv[2])
 
 	loadFile()
@@ -135,6 +144,4 @@ if (process.argv.length<3){
 		saveFile()
 	})
 }
-
-
 

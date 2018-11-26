@@ -2,10 +2,12 @@
 
 set -e
 
-PICTURES_DIR="pictures"
-SENT_PHOTOS="sent"
-IMAGE_DOWNLOADER_SCRIPT="image_downloader.js"
-ARCHIVE_FILE="archive.zip"
+BASEDIR="$(dirname "$(readlink -f "$0")")"
+
+PICTURES_DIR="$BASEDIR/pictures"
+SENT_PHOTOS="$BASEDIR/sent"
+IMAGE_DOWNLOADER_SCRIPT="$BASEDIR/image_downloader.js"
+ARCHIVE_FILE="$BASEDIR/archive.zip"
 
 function die(){
 	echo "$@"
@@ -18,7 +20,7 @@ function updateImages(){
 
 	echo "Updating image galery"
 	rm -f "$ARCHIVE_FILE"
-	./"$IMAGE_DOWNLOADER_SCRIPT" "$1"
+	"$IMAGE_DOWNLOADER_SCRIPT" "$1" "$ARCHIVE_FILE"
 
 	if [ -f "$ARCHIVE_FILE" ]; then
 		echo "Done downloading archive"
@@ -42,7 +44,7 @@ function sendPostcard(){
 	echo "Downloading picture: $downloading_picture"
 	echo "With following quote: $quote"
 
-	postcards send --config config.json --picture "$downloading_picture" --message "$quote"
+#	postcards send --config config.json --picture "$downloading_picture" --message "$quote"
 
 	mv "$downloading_picture" "$SENT_PHOTOS"
 
@@ -52,7 +54,9 @@ function sendPostcard(){
 if [ "$#" -ne 1 ]; then
 	die "No share ID provided"
 fi
-	
+
+echo "$BASEDIR"
+
 updateImages "$1"
 sendPostcard
 
