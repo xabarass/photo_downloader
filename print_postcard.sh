@@ -20,7 +20,7 @@ function updateImages(){
 
 	echo "Updating image galery"
 	rm -f "$ARCHIVE_FILE"
-	"$IMAGE_DOWNLOADER_SCRIPT" "$1" "$ARCHIVE_FILE"
+	"$IMAGE_DOWNLOADER_SCRIPT" "$1" "$BASEDIR"
 
 	if [ -f "$ARCHIVE_FILE" ]; then
 		echo "Done downloading archive"
