@@ -31,7 +31,8 @@ function updateImages(){
 }
 
 function sendPostcard(){
-	images=($(find "$PICTURES_DIR" -type f))
+	# TODO: Figure out how to print heic format!
+	images=($(find "$PICTURES_DIR" -type f -type f -name "*.jpeg" -o -name "*.jpg"))
 	
 	if [ "${#images[@]}" -eq 0 ]; then
 		echo "No more images for sending!"
@@ -44,7 +45,7 @@ function sendPostcard(){
 	echo "Downloading picture: $downloading_picture"
 	echo "With following quote: $quote"
 
-#	postcards send --config config.json --picture "$downloading_picture" --message "$quote"
+	postcards send --config config.json --picture "$downloading_picture" --message "$quote"
 
 	mv "$downloading_picture" "$SENT_PHOTOS"
 
