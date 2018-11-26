@@ -9,6 +9,16 @@ SENT_PHOTOS="$BASEDIR/sent"
 IMAGE_DOWNLOADER_SCRIPT="$BASEDIR/image_downloader.js"
 ARCHIVE_FILE="$BASEDIR/archive.zip"
 
+function sleepUntil(){
+	local END_EPOCH="$(date -d $1 +%s)"
+	local CURR_EPOCH="$(date +%s)"
+
+	sleep_seconds=$(( $END_EPOCH - $CURR_EPOCH ))
+
+	echo "Sleeping for: $sleep_seconds"
+	sleep "$sleep_seconds"
+}
+
 function die(){
 	echo "$@"
 	exit 1
@@ -45,7 +55,12 @@ function sendPostcard(){
 	echo "Downloading picture: $downloading_picture"
 	echo "With following quote: $quote"
 
-	postcards send --config config.json --picture "$downloading_picture" --message "$quote"
+	if ! OUTPUT="$(postcards send --config config.json --picture "$downloading_picture" --message "$quote")" ; then
+		# We need to sleep until we can send more freee postcards
+		NEXT_SEND_TIME="$(echo "$OUTPUT" | tail -n 1 | awk '{print $NF}')"
+		sleepUntil "$NEXT_SEND_TIME"
+		postcards send --config config.json --picture "$downloading_picture" --message "$quote"
+	fi
 
 	mv "$downloading_picture" "$SENT_PHOTOS"
 
